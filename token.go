@@ -8,7 +8,7 @@ import (
 	"golang.org/x/net/html"
 )
 
-func GetToken() {
+func GetToken() (string, error) {
 	simPOSURL := &url.URL{
 		Scheme:   "https",
 		Host:     "tools.uat.tutuka.cloud",
@@ -16,7 +16,7 @@ func GetToken() {
 		RawQuery: "target=simpos",
 	}
 
-	reqHeader := http.Header{"cookie": []string{"CFID=20557", "CFTOKEN=3b79a1e3c773c94-E7F38875-D295-8B7C-22E05E8FB40599AD", "AWSALB=tugAHNMcNux96I1rB8PSGBdahIZcYro+F/J3FXiAMgYvpsE+9Z7nGMmQgVNbx9M/S5t5WBSHseSjVPZnvphy6yk9ilb5Q4/ABOHnqNMOswe9TU7nzLeLe5q7chMA", "AWSALBCORS=tugAHNMcNux96I1rB8PSGBdahIZcYro+F/J3FXiAMgYvpsE+9Z7nGMmQgVNbx9M/S5t5WBSHseSjVPZnvphy6yk9ilb5Q4/ABOHnqNMOswe9TU7nzLeLe5q7chMA", "CFGLOBALS=urltoken=CFID#=20557&CFTOKEN#=3b79a1e3c773c94-E7F38875-D295-8B7C-22E05E8FB40599AD#lastvisit={ts '2021-04-29 06:46:58'}#hitcount=683#timecreated={ts '2020-04-20 10:46:05'}#cftoken=3b79a1e3c773c94-E7F38875-D295-8B7C-22E05E8FB40599AD#cfid=20557#"}}
+	reqHeader := http.Header{"cookie": []string{"CFID=20557", "CFTOKEN=3b79a1e3c773c94-E7F38875-D295-8B7C-22E05E8FB40599AD"}}
 
 	req := &http.Request{
 		Method: http.MethodGet,
@@ -32,13 +32,12 @@ func GetToken() {
 	defer response.Body.Close()
 
 	z := html.NewTokenizer(response.Body)
-	fmt.Println(z.TagName())
 	for {
 		tt := z.Next()
 		switch {
 		case tt == html.ErrorToken:
 			// End of the document, it's done
-			return
+			return "", ErrTokenUnavailable
 		case tt == html.StartTagToken:
 			t := z.Token()
 
@@ -50,12 +49,10 @@ func GetToken() {
 						if !ok {
 							continue
 						}
-						fmt.Println(jwt)
-						break
+						return jwt, nil
 					}
 				}
 			}
-			break
 		}
 	}
 }

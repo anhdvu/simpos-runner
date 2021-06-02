@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"gopkg.in/yaml.v3"
@@ -48,18 +47,18 @@ type TestCase struct {
 	Country                       string
 }
 
-func ParseConfig() {
+func ParseConfig() (*Config, error) {
 	raw, err := os.ReadFile("config.yaml")
 
 	if err != nil {
-		fmt.Println(ErrReadingConfigFile, err)
+		return nil, err
 	}
 
 	config := &Config{}
 	err = yaml.Unmarshal(raw, config)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	fmt.Printf("%+v\n", config)
+	return config, nil
 }

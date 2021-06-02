@@ -24,7 +24,7 @@ const (
 )
 
 var (
-	ErrUnsupportedMode   = errors.New("The specified mode is not supported. Please check for typos or specify a supported mode.")
-	ErrSettleTypeNotSet  = errors.New("In Settlement mode but SettleType was not set. Please check config file again.")
-	ErrReadingConfigFile = errors.New("Cannot read config file. Please check file name and path.")
+	ErrUnsupportedMode  = errors.New("The specified mode is not supported. Please check for typos or specify a supported mode.")
+	ErrSettleTypeNotSet = errors.New("In Settlement mode but SettleType was not set. Please check config file again.")
+	ErrTokenUnavailable = errors.New("Couldn't retrieve token. Please check provided cookie header in config file.")
 )
