@@ -1,0 +1,37 @@
+---
+# This is a comment
+# More comments
+# Even more comments
+cookie:
+  - CFID=20557
+  - CFTOKEN=3b79a1e3c773c94-E7F38875-D295-8B7C-22E05E8FB40599AD
+  - AWSALB=tugAHNMcNux96I1rB8PSGBdahIZcYro+F/J3FXiAMgYvpsE+9Z7nGMmQgVNbx9M/S5t5WBSHseSjVPZnvphy6yk9ilb5Q4/ABOHnqNMOswe9TU7nzLeLe5q7chMA
+  - AWSALBCORS=tugAHNMcNux96I1rB8PSGBdahIZcYro+F/J3FXiAMgYvpsE+9Z7nGMmQgVNbx9M/S5t5WBSHseSjVPZnvphy6yk9ilb5Q4/ABOHnqNMOswe9TU7nzLeLe5q7chMA
+  - CFGLOBALS=urltoken=CFID#=20557&CFTOKEN#=3b79a1e3c773c94-E7F38875-D295-8B7C-22E05E8FB40599AD#lastvisit={ts '2021-04-29 06:46:58'}#hitcount=683#timecreated={ts '2020-04-20 10:46:05'}#cftoken=3b79a1e3c773c94-E7F38875-D295-8B7C-22E05E8FB40599AD#cfid=20557#
+name: test config
+sharedtestconfig:
+  - amountMin: 1
+  - amountMax: 6
+  - defaultOriginalCurrencyCode: '978'
+  - defaultOriginalCurrencyDecimalPlaces: '2'
+testcard:
+  - number: '5338485258218895'
+  - expirydate: '3011'
+  - cvv: '654'
+  - pin: '1234'
+testcases:
+  - included: true # Possible values: true/false. Set to "false" to exclude the test in the run. Default value: true
+    name: Test an ecommerce transaction
+    run: 1 # Set the number of runs for a specific test case. Default value: 1
+    mode: pos # Possible values: pos, web, settlement. Any other values will be assumed error.
+    atm: false # Possible values: true/false. Set to true to indicate the transaction type is ATM (01). Default value: false
+    settleType: none # Possible values: none, refund, fxload, fxdeduct. ONLY set this field to some other value than none when mode == settlement. Default value: none  
+    reversal: none # Possible values: none, partial, or full. Any other values will be assumed as none. Default value: none
+    mcc: '7299'
+    source: emv # Possible values: mag, emv, or nfc. Any other values will be assumed as mag. Default value: emv
+    foreign: false # Possible values: true/false. Set to true to indicate the original currency is not the one set in campaign setting. Default value: false 
+    originalCurrencyCode: # If not explicitly set while foreign == true, the automator will take defaultOriginalCurrencyCode instead.
+    originalCurrencyDecimalPlaces: # If not explicitly set while foreign == true, the automator will take defaultOriginalCurrencyDecimalPlaces instead.
+    acquirer: ECOM DEDUCT
+    province: COMPANION
+    country: VNM # Country should be set to align with originalCurrencyCode if foreign == true
