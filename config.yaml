@@ -22,11 +22,11 @@ testcard:
 testcases:
   - included: true # Possible values: true/false. Set to "false" to exclude the test in the run. Default value: true
     name: Test an ecommerce transaction
-    run: 1 # Set the number of runs for a specific test case. Default value: 1
+    runs: 1 # Set the number of runs for a specific test case. Default value: 1
     mode: pos # Possible values: pos, web, settlement. Any other values will be assumed error.
     atm: false # Possible values: true/false. Set to true to indicate the transaction type is ATM (01). Default value: false
-    settleType: none # Possible values: none, refund, fxload, fxdeduct. ONLY set this field to some other value than none when mode == settlement. Default value: none  
-    reversal: none # Possible values: none, partial, or full. Any other values will be assumed as none. Default value: none
+    settleType: # Possible values: refund, fxload, fxdeduct. This field must be set when mode == settlement. Default value: "" (emptry string)
+    reversal: # Possible values: none, partial, or full. Any other values will be assumed as "". Default value: "" (empty string)
     mcc: '7299'
     source: emv # Possible values: mag, emv, or nfc. Any other values will be assumed as mag. Default value: emv
     foreign: false # Possible values: true/false. Set to true to indicate the original currency is not the one set in campaign setting. Default value: false 
