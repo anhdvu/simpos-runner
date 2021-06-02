@@ -9,6 +9,7 @@ const (
 	acquirerLength int    = 22
 	provinceLength int    = 13
 	countryLength  int    = 3
+	baseUrl        string = "https://tools.uat.tutuka.cloud/api/json.cfm"
 )
 
 var (
