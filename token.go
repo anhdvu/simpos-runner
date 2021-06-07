@@ -8,7 +8,7 @@ import (
 	"golang.org/x/net/html"
 )
 
-func GetToken() (string, error) {
+func GetToken(cookie []string) (string, error) {
 	simPOSURL := &url.URL{
 		Scheme:   "https",
 		Host:     "tools.uat.tutuka.cloud",
@@ -16,7 +16,7 @@ func GetToken() (string, error) {
 		RawQuery: "target=simpos",
 	}
 
-	reqHeader := http.Header{"cookie": []string{"CFID=20557", "CFTOKEN=3b79a1e3c773c94-E7F38875-D295-8B7C-22E05E8FB40599AD"}}
+	reqHeader := http.Header{"cookie": cookie}
 
 	req := &http.Request{
 		Method: http.MethodGet,

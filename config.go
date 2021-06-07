@@ -7,19 +7,19 @@ import (
 )
 
 type Config struct {
-	Name             string
-	Cookie           []string
-	TestCard         TestCard
-	SharedTestConfig SharedTestConfig
-	TestCases        []TestCase
+	Name      string
+	Cookie    []string
+	TestCard  TestCard
+	Shared    SharedConfig
+	TestCases []TestCase
 }
 
-type SharedTestConfig struct {
-	AmountMin                     float64
-	AmountMax                     float64
-	DefaultOriginalCurrencyCode   string
-	DefaultOriginalCurrencyPlaces string
-	Token                         string
+type SharedConfig struct {
+	AmountMin                            float64 `yaml:"amountMin"`
+	AmountMax                            float64 `yaml:"amountMax"`
+	DefaultOriginalCurrencyCode          string  `yaml:"defaultOriginalCurrencyCode"`
+	DefaultOriginalCurrencyDecimalPlaces string  `yaml:"defaultOriginalCurrencyDecimalPlaces"`
+	Token                                string  `yaml:"token"`
 }
 
 type TestCard struct {
@@ -35,7 +35,7 @@ type TestCase struct {
 	Runs                          int
 	Mode                          string
 	ATM                           bool
-	SettleType                    string
+	SettleType                    string `yaml:"settleType"`
 	Reversal                      string
 	Mcc                           string
 	Source                        string
@@ -47,8 +47,8 @@ type TestCase struct {
 	Country                       string
 }
 
-func ParseConfig() (*Config, error) {
-	raw, err := os.ReadFile("config.yaml")
+func ParseConfig(f string) (*Config, error) {
+	raw, err := os.ReadFile(f)
 
 	if err != nil {
 		return nil, err
@@ -61,4 +61,18 @@ func ParseConfig() (*Config, error) {
 	}
 
 	return config, nil
+}
+
+func (c *Config) ParseConfig(f string) error {
+	file, err := os.Open(f)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	d := yaml.NewDecoder(file)
+	err = d.Decode(c)
+	if err != nil {
+		return err
+	}
+	return nil
 }

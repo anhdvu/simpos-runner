@@ -1,26 +1,24 @@
 ---
-# This is a comment
-# More comments
-# Even more comments
+name: Alpha config
 cookie:
   - CFID=20557
   - CFTOKEN=3b79a1e3c773c94-E7F38875-D295-8B7C-22E05E8FB40599AD
-name: test config
-sharedtestconfig:
-  amountMin: 1
-  amountMax: 6
-  defaultOriginalCurrencyCode: '978'
-  defaultOriginalCurrencyDecimalPlaces: '2'
 testcard:
   number: '5338485258218895'
   expirydate: '3011'
   cvv: '654'
   pin: '1234'
+shared:
+  amountMin: 1
+  amountMax: 6
+  defaultOriginalCurrencyCode: '978'
+  defaultOriginalCurrencyDecimalPlaces: '2'
+  token:
 testcases:
-  - included: true # Possible values: true/false. Set to "false" to exclude the test in the run. Default value: true
+  - included: false # Possible values: true/false. Set to "false" to exclude the test in the run. Default value: true
     name: Test an ecommerce transaction
     runs: 1 # Set the number of runs for a specific test case. Default value: 1
-    mode: pos # Possible values: pos, web, settlement. Any other values will be assumed error.
+    mode: web # Possible values: pos, web, settlement. Any other values will be assumed error.
     atm: false # Possible values: true/false. Set to true to indicate the transaction type is ATM (01). Default value: false
     settleType: # Possible values: refund, fxload, fxdeduct. This field must be set when mode == settlement. Default value: "" (emptry string)
     reversal: # Possible values: none, partial, or full. Any other values will be assumed as "". Default value: "" (empty string)
@@ -32,3 +30,67 @@ testcases:
     acquirer: ECOM DEDUCT
     province: COMPANION
     country: VNM # Country should be set to align with originalCurrencyCode if foreign == true
+
+  - included: false 
+    name: Test a pos reversal transaction
+    runs: 1 
+    mode: pos 
+    atm: false 
+    settleType: 
+    reversal: full 
+    mcc: '7299'
+    source: nfc 
+    foreign: false 
+    originalCurrencyCode: 
+    originalCurrencyDecimalPlaces:
+    acquirer: POS DEDUCT REV
+    province: COMPANION
+    country: VNM
+
+  - included: false 
+    name: Test a refund transaction
+    runs: 1 
+    mode: settlement 
+    atm: false 
+    settleType: refund
+    reversal:
+    mcc: '7299'
+    source: nfc
+    foreign: false
+    originalCurrencyCode:
+    originalCurrencyDecimalPlaces:
+    acquirer: REFUND TEST
+    province: COMPANION
+    country: VNM
+
+  - included: true 
+    name: Test a fx load adjustment transaction
+    runs: 1 
+    mode: settlement 
+    atm: false 
+    settleType: fxload
+    reversal:
+    mcc: '7299'
+    source:
+    foreign: false
+    originalCurrencyCode:
+    originalCurrencyDecimalPlaces:
+    acquirer: FX LOAD TEST
+    province: COMPANION
+    country: VNM
+
+  - included: false 
+    name: Test a fx deduct adjustment transaction
+    runs: 1 
+    mode: settlement 
+    atm: false 
+    settleType: fxdeduct
+    reversal:
+    mcc: '7299'
+    source:
+    foreign: false
+    originalCurrencyCode:
+    originalCurrencyDecimalPlaces:
+    acquirer: FX DEDUCT TEST
+    province: COMPANION
+    country: VNM

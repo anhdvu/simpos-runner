@@ -1,6 +1,8 @@
 package main
 
-import "errors"
+import (
+	"errors"
+)
 
 const (
 	pos            string = "pos"
@@ -18,9 +20,15 @@ const (
 	refundAdj        string = "RefundAdjustment"
 	forexAdj         string = "ForexAdjustment"
 
+	refund   string = "refund"
+	fxload   string = "fxload"
+	fxdeduct string = "fxdeduct"
+
 	mag string = "mag"
 	emv string = "emv"
 	nfc string = "nfc"
+
+	timeout int = 300
 )
 
 var (
