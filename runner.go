@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func main() {
+func Run() {
 
 	c, _ := ParseConfig("config.yaml")
 	token, _ := GetToken(c.Cookie)
