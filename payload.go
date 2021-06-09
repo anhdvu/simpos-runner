@@ -112,7 +112,12 @@ func makeAuth(tc TestCase, shared SharedConfig, card TestCard) (Payload, error) 
 
 		pl.Params.Network = "0"
 		pl.Params.Pin = card.Pin
-		pl.Params.Source = strings.ToUpper(tc.Source)
+		if tc.Source == mag || tc.Source == nfc {
+			pl.Params.Source = strings.ToUpper(tc.Source)
+		} else {
+			tc.Source = strings.ToUpper(emv)
+		}
+
 	case web:
 		switch tc.Reversal {
 		case "full":
