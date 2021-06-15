@@ -16,24 +16,22 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
+	"os"
 
+	"github.com/anhdvu/simposbot/simpos"
 	"github.com/spf13/cobra"
 )
 
 // runCmd represents the run command
 var runCmd = &cobra.Command{
 	Use:   "run",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("run called")
-	},
+	Short: "Run predefined test cases or queues.",
+	Long: `Run is the main command of spb tool.
+Its main function is to run test cases defined in a config file.
+Another use is to run reversal, adjustment queue, or both.
+Check below for usage.
+`,
+	Run: runRun,
 }
 
 func init() {
@@ -48,4 +46,27 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// runCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
+	runCmd.Flags().StringP("file", "f", "", "Config file")
+	runCmd.Flags().StringP("queue", "q", "", "Run queue")
+}
+
+func runRun(cmd *cobra.Command, args []string) {
+	f, _ := cmd.Flags().GetString("file")
+	q, _ := cmd.Flags().GetString("queue")
+	if len(args) == 0 && f == "" && q == "" {
+		cmd.Help()
+		os.Exit(0)
+	}
+
+	if f != "" {
+		simpos.Run(f)
+	} else {
+		switch q {
+		case "reversal":
+		case "adjustment":
+		case "both":
+		default:
+		}
+	}
 }

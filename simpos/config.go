@@ -45,6 +45,7 @@ type TestCase struct {
 	Acquirer                      string
 	Province                      string
 	Country                       string
+	Advice                        bool
 }
 
 func ParseConfig(f string) (*Config, error) {

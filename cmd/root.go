@@ -25,14 +25,15 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "simposbot",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Use:   "spb",
+	Short: "A testing automation tool that utilizes SimPOS REST API.",
+	Long: `Simposbot, or spb for short, is a CLI-based testing automation tool. 
+It utilizes the SimPOS REST API to automate testing efforts.
+Its main strengths are light-weight and extensible.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Usage examples:
+	spb run --file <config file> ==> Run predefined test cases in a config file.
+	spb run --queue reversal/adjustment/both ==> Run either the reversal, adjustment queue, or both.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },

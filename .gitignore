@@ -1,3 +1,4 @@
 *.txt
 *.log
 go.sum
+bin/

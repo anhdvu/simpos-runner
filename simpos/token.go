@@ -1,7 +1,6 @@
 package simpos
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 
@@ -27,7 +26,7 @@ func GetToken(cookie []string) (string, error) {
 	response, err := http.DefaultClient.Do(req)
 
 	if err != nil {
-		fmt.Println(err)
+		return "", err
 	}
 	defer response.Body.Close()
 

@@ -35,6 +35,7 @@ type Auth struct {
 		Acquirer                      string `json:"acquirer"`
 		Province                      string `json:"province"`
 		Country                       string `json:"country"`
+		IsAdvice                      bool   `json:"isAdvice"`
 	} `json:"params"`
 }
 
@@ -79,7 +80,7 @@ func NewPayload(tc TestCase, shared SharedConfig, card TestCard) (Payload, error
 	return nil, ErrUnsupportedMode
 }
 
-func makeAuth(tc TestCase, shared SharedConfig, card TestCard) (Payload, error) {
+func makeAuth(tc TestCase, shared SharedConfig, card TestCard) (*Auth, error) {
 	amount := randomizeAmount(shared)
 
 	pl := &Auth{}
@@ -155,7 +156,7 @@ func makeAuth(tc TestCase, shared SharedConfig, card TestCard) (Payload, error) 
 		pl.Params.OriginalCurrencyCode = ""
 		pl.Params.OriginalCurrencyDecimalPlaces = ""
 	}
-
+	pl.Params.IsAdvice = tc.Advice
 	pl.Params.MerchantCategoryCode = tc.Mcc
 	pl.Params.Token = shared.Token
 	pl.Params.Acquirer = formatAcquirer(tc.Acquirer, acquirerLength)
@@ -165,7 +166,7 @@ func makeAuth(tc TestCase, shared SharedConfig, card TestCard) (Payload, error) 
 	return pl, nil
 }
 
-func makeSettle(tc TestCase, shared SharedConfig, card TestCard) (Payload, error) {
+func makeSettle(tc TestCase, shared SharedConfig, card TestCard) (*Settle, error) {
 	amount := randomizeAmount(shared)
 
 	pl := &Settle{}
@@ -232,17 +233,17 @@ func NewRequest(p Payload) (*http.Request, error) {
 }
 
 type Result struct {
-	IsoRequest             string
-	IsoResponse            string
-	IsoResponsePacket      map[string]string
-	ResultCode             int
-	ResultText             string
-	ReversalIsoRequest     string
-	ReversalIsoResponse    string
-	ReversalWalletRequest  string
-	ReversalWalletResponse string
-	WalletRequest          string
-	WalletResponse         string
+	IsoRequest             string            `json:"isoRequest"`
+	IsoResponse            string            `json:"isoResponse"`
+	IsoResponsePacket      map[string]string `json:"isoResponsePacket"`
+	ResultCode             int               `json:"resultCode,omitempty"`
+	ResultText             string            `json:"resultText,omitempty"`
+	ReversalIsoRequest     string            `json:"reversalIsoRequest,omitempty"`
+	ReversalIsoResponse    string            `json:"reversalIsoResponse,omitempty"`
+	ReversalWalletRequest  string            `json:"reversalWalletRequest,omitempty"`
+	ReversalWalletResponse string            `json:"reversalWalletResponse,omitempty"`
+	WalletRequest          string            `json:"walletRequest"`
+	WalletResponse         string            `json:"walletResponse"`
 }
 
 func (r *Result) FromJSON(b io.Reader) error {
