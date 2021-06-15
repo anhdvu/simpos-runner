@@ -62,11 +62,9 @@ func runRun(cmd *cobra.Command, args []string) {
 	if f != "" {
 		simpos.Run(f)
 	} else {
-		switch q {
-		case "reversal":
-		case "adjustment":
-		case "both":
-		default:
+		if q != "" {
+			simpos.RunQueues(q)
 		}
 	}
+	os.Exit(0)
 }

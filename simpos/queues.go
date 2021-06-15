@@ -29,6 +29,8 @@ func RunQueues(q string) {
 		if err != nil {
 			fmt.Println("ERROR: Unable to run adjustment queue", err)
 		}
+	default:
+		fmt.Println("No queue specified. Please check typo.")
 	}
 	fmt.Println("DONE!")
 }
