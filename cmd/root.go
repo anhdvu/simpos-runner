@@ -27,7 +27,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "spb",
 	Short: "A testing automation tool that utilizes SimPOS REST API.",
-	Long: `Simposbot, or spb for short, is a CLI-based testing automation tool. 
+	Long: `Simpos Bot, or spb for short, is a CLI-based testing automation tool. 
 It utilizes the SimPOS REST API to automate testing efforts.
 Its main strengths are light-weight and extensible.
 
