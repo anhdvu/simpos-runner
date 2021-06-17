@@ -17,6 +17,10 @@ https://github.com/anhdvu/simposbot/releases
 
 ## **Config File**
 
+A config file is typically a .yaml file. [Learn more about yaml file](https://en.wikipedia.org/wiki/YAML).
+
+However, any file extension should work as long as the content follows YAML syntax.
+
 ### **Sample**
 
     name: Sample config
@@ -51,6 +55,9 @@ https://github.com/anhdvu/simposbot/releases
       province: COMPANION
       country: VNM
       advice: false
+
+
+***IMPORTANT***: *The hyphen "-" before "included" is mandatory because it signals a new test case.*
 
 ### **Test Case Settings**
 
