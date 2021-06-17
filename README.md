@@ -1,4 +1,4 @@
-# **SIMPOSBOT**
+# **SIMPOS BOT**
 
 Simpos Bot, or spb for short, is a CLI-based testing automation tool. 
 It utilizes the SimPOS REST API to automate testing efforts.
