@@ -17,10 +17,11 @@ shared:
 testcases:
   - included: true # Possible values: true/false. Set to "false" to exclude the test in the run. Default value: true
     name: Test an ecommerce transaction
-    runs: 1 # Set the number of runs for a specific test case. Default value: 1.
-    mode: web # Possible values: pos, web, settlement. Any other values will be assumed error.
+    runs: 10 # Set the number of runs for a specific test case. Default value: 1.
+    mode: web # Possible values: pos, web, settlement, payment. Any other values will be assumed error.
     atm: false # Possible values: true/false. Set to true to indicate the transaction type is ATM (01). Default value: false.
     settleType: # Possible values: refund, fxload, fxdeduct. This field must be set when mode == settlement. Default value: "" (emptry string).
+    paymentType: # Possible values: payment, refund. This field must be set when mode == payment. Default value: "" (emptry string).
     reversal: # Possible values: partial or full. Any other values will be assumed as "". Default value: "" (empty string).
     mcc: '7299'
     source: emv # Possible values: mag, emv, or nfc. Any other values will be assumed as mag. Default value: emv
@@ -32,12 +33,13 @@ testcases:
     country: VNM # Country should be set to align with originalCurrencyCode if foreign == true.
     advice: false # Indicate whether a transaction is a Deduct Advice. This field is irrelevant to Settlement. Default value: false.
 
-  - included: true 
+  - included: false 
     name: Test a pos reversal transaction
-    runs: 1 
+    runs: 100 
     mode: pos 
     atm: false 
-    settleType: 
+    settleType:
+    paymentType: 
     reversal: full 
     mcc: '7299'
     source: nfc 
@@ -49,12 +51,13 @@ testcases:
     country: DEU
     advice: false
 
-  - included: true 
+  - included: false 
     name: Test a refund transaction
     runs: 1 
     mode: settlement 
     atm: false 
     settleType: refund
+    paymentType:
     reversal:
     mcc: '7299'
     source: nfc
@@ -66,12 +69,13 @@ testcases:
     country: VNM
     advice: false
 
-  - included: true 
+  - included: false 
     name: Test a fx load adjustment transaction
     runs: 1 
     mode: settlement 
     atm: false 
     settleType: fxload
+    paymentType:
     reversal:
     mcc: '7299'
     source:
@@ -89,6 +93,7 @@ testcases:
     mode: settlement 
     atm: false 
     settleType: fxdeduct
+    paymentType:
     reversal:
     mcc: '7299'
     source:
@@ -98,4 +103,22 @@ testcases:
     acquirer: FX DEDUCT TEST
     province: COMPANION
     country: SGP
+    advice: false
+  
+  - included: false 
+    name: Refund Auth
+    runs: 10 
+    mode: payment 
+    atm: false 
+    settleType:
+    paymentType: refund
+    reversal:
+    mcc: '7299'
+    source: nfc
+    foreign: false
+    originalCurrencyCode:
+    originalCurrencyDecimalPlaces:
+    acquirer: REFUND AUTH
+    province: COMPANION
+    country: VNM
     advice: false

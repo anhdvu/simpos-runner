@@ -3,34 +3,39 @@ package simpos
 import (
 	"fmt"
 	"net/http"
+	"strings"
 )
 
-func RunQueues(q string) {
+func RunQueue(q string) error {
 	switch q {
-	case reversal:
-		fmt.Println("Running reversal queue...")
-		_, err := http.Get(reversalQueue)
+	case reversal, adjustment:
+		fmt.Printf("Running %v queue...\n", q)
+		err := runTask(companionTaskUrl, q)
 		if err != nil {
-			fmt.Println("ERROR: Unable to run reversal queue", err)
-		}
-	case adjustment:
-		fmt.Println("Running adjustment queue...")
-		_, err := http.Get(adjustmentQueue)
-		if err != nil {
-			fmt.Println("ERROR: Unable to run adjustment queue", err)
+			return err
 		}
 	case both:
 		fmt.Println("Running reversal and adjustment queue...")
-		_, err := http.Get(reversalQueue)
+		err := runTask(companionTaskUrl, reversal)
 		if err != nil {
-			fmt.Println("ERROR: Unable to run reversal queue", err)
+			return err
 		}
-		_, err = http.Get(adjustmentQueue)
+		err = runTask(companionTaskUrl, adjustment)
 		if err != nil {
-			fmt.Println("ERROR: Unable to run adjustment queue", err)
+			return err
 		}
 	default:
-		fmt.Println("No queue specified. Please check typo.")
+		return ErrNoQueueSpecified
 	}
 	fmt.Println("DONE!")
+	return nil
+}
+
+func runTask(baseTaskUrl string, task string) error {
+	u := baseTaskUrl + strings.Title(task)
+	_, err := http.Get(u)
+	if err != nil {
+		return ErrQueueRun
+	}
+	return nil
 }

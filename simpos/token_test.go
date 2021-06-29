@@ -13,7 +13,7 @@ func TestGetToken(t *testing.T) {
 		token, err := GetToken(cookie)
 
 		if err != nil {
-			t.Errorf("Expected err == nil but got err != nil.")
+			t.Errorf("Expected err == nil but got err != nil. %v", err)
 		}
 
 		parts := strings.Split(token, ".")
@@ -35,6 +35,10 @@ func TestGetToken(t *testing.T) {
 
 		if err == nil {
 			t.Errorf("Expected error != nil but got error == nil")
+		}
+
+		if err != ErrTokenUnavailable {
+			t.Errorf("Expected %v but got a different error.", ErrTokenUnavailable)
 		}
 	})
 }

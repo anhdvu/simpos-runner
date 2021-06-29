@@ -1,6 +1,6 @@
 # **SIMPOS BOT**
 
-Simpos Bot, or spb for short, is a CLI-based testing automation tool. 
+SimPOS Bot, or spb for short, is a CLI testing automation tool. 
 It utilizes the SimPOS REST API to automate testing efforts.
 Its main strengths are light-weight and extensible.
 ## **Usage**
@@ -75,6 +75,7 @@ However, any file extension should work as long as the content follows YAML synt
 > Possible values: *refund*, *fxload*, *fxdeduct*. This field must be set when ***mode == settlement***. Default value: "" (emptry string).
 - **reversal**: 
 > Possible values: *partial* or *full*. Any other values will be assumed as "". Default value: "" (empty string).
+> Note: if paymentType is set, *partial* and *full* will have the same behavior which is full reversal.
 - **mcc**:
 > The tool does NOT check for valid MCC. Any 4 digits should work
 - **source**: 
@@ -98,8 +99,8 @@ However, any file extension should work as long as the content follows YAML synt
 
 - **name**: Any name is fine.
 
-- **cookie**: This is used to retrive JWT, which, in turn, is used to run test cases. You can set your own values by getting them via your browser's DevTools.
-- **testcard**: card details should be set here.
+- **cookie**: This is used to retrive JWT, which, in turn, is used to run test cases with SimPOS. You can set your own values by getting them via your browser's DevTools.
+- **testcard**: card details are set here.
   - number
   - expirydate
   - cvv

@@ -63,7 +63,7 @@ func runRun(cmd *cobra.Command, args []string) {
 		simpos.Run(f)
 	} else {
 		if q != "" {
-			simpos.RunQueues(q)
+			simpos.RunQueue(q)
 		}
 	}
 	os.Exit(0)

@@ -10,7 +10,7 @@ import (
 )
 
 type Payload interface {
-	GetMethod() string
+	JSON(w io.Writer) error
 }
 
 type Auth struct {
@@ -39,8 +39,9 @@ type Auth struct {
 	} `json:"params"`
 }
 
-func (a *Auth) GetMethod() string {
-	return a.Method
+func (a *Auth) JSON(w io.Writer) error {
+	e := json.NewEncoder(w)
+	return e.Encode(a)
 }
 
 type Settle struct {
@@ -63,8 +64,25 @@ type Settle struct {
 	} `json:"params"`
 }
 
-func (s *Settle) GetMethod() string {
-	return s.Method
+func (s *Settle) JSON(w io.Writer) error {
+	e := json.NewEncoder(w)
+	return e.Encode(s)
+}
+
+type Payment struct {
+	Method string `json:"method"`
+	Params struct {
+		Amount              string `json:"amount"`
+		CardNumber          string `json:"cardNumber"`
+		MerchantDescription string `json:"merchantDescription"`
+		Reversal            bool   `json:"reversal"`
+		Token               string `json:"token"`
+	} `json:"params"`
+}
+
+func (p *Payment) JSON(w io.Writer) error {
+	e := json.NewEncoder(w)
+	return e.Encode(p)
 }
 
 func NewPayload(tc TestCase, shared SharedConfig, card TestCard) (Payload, error) {
@@ -222,8 +240,7 @@ func makeSettle(tc TestCase, shared SharedConfig, card TestCard) (*Settle, error
 
 func NewRequest(p Payload) (*http.Request, error) {
 	buf := &bytes.Buffer{}
-	e := json.NewEncoder(buf)
-	err := e.Encode(p)
+	err := p.JSON(buf)
 	if err != nil {
 		fmt.Println("Error occured at function NewRequest.")
 		return nil, err
@@ -235,7 +252,9 @@ func NewRequest(p Payload) (*http.Request, error) {
 type Result struct {
 	IsoRequest             string            `json:"isoRequest"`
 	IsoResponse            string            `json:"isoResponse"`
+	IsoPacket              map[string]string `json:"isoPacket,omitempty"`
 	IsoResponsePacket      map[string]string `json:"isoResponsePacket"`
+	IsoSettlementResponse  map[string]string `json:"isoSettlementResponse,omitempty"`
 	ResultCode             int               `json:"resultCode,omitempty"`
 	ResultText             string            `json:"resultText,omitempty"`
 	ReversalIsoRequest     string            `json:"reversalIsoRequest,omitempty"`

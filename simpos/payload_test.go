@@ -2,28 +2,35 @@ package simpos
 
 import (
 	"bytes"
+	"encoding/json"
+	"io"
 	"reflect"
 	"testing"
 )
 
-type mockPayload struct {
+type MockPayload struct {
+	Name string `json:"name"`
 }
 
-func (mp *mockPayload) GetMethod() string {
-	return "mock"
+func (mp *MockPayload) JSON(w io.Writer) error {
+	return json.NewEncoder(w).Encode(mp)
 }
-func TestGetMethod(t *testing.T) {
-	var mock Payload = &mockPayload{}
-
-	want := "mock"
-	got := mock.GetMethod()
-
+func TestPayload_JSON(t *testing.T) {
+	var mock Payload = &MockPayload{Name: "mock"}
+	buf := &bytes.Buffer{}
+	want := `{"name":"mock"}
+`
+	err := mock.JSON(buf)
+	got := buf.String()
+	if err != nil {
+		t.Errorf("Expected err == nil but got err == %v", err)
+	}
 	if want != got {
 		t.Errorf("Wanted %q but got %q", want, got)
 	}
 }
 
-func TestFromJSON(t *testing.T) {
+func TestResult_FromJSON(t *testing.T) {
 	t.Run("Happy path", func(t *testing.T) {
 		data := `{
 			"isoRequest": "xxx",
