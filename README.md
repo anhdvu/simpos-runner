@@ -64,43 +64,43 @@ However, any file extension should work as long as the content follows YAML synt
 ### **Test Case Settings**
 
 - **included**: 
-> Possible values: *true*/*false*. Set to *false* to exclude the test in the run. Default value: *true*.
+> Type: boolean. Possible values: *true*/*false*. Set to *false* to exclude the test in the run. Default value: *true*.
 - **name**: 
-> Name of the test case.
+> Type: string. Name of the test case.
 - **runs**: 
-> Set the number of runs for a specific test case. Default value: 1.
+> Type: integer. Set the number of runs for a specific test case. Default value: 1.
 - **mode**: 
-> Possible values: *pos*, *web*, *settlement*, *payment*. Any other values will throw error.
+> Type: string. Possible values: *pos*, *web*, *settlement*, *payment*. Any other values will throw error.
 - **function**:
-> This field is tied with field mode above, therefore it must be set accordingly. Otherwise, it will throw error. 
+> Type: string. This field is tied with field mode above, therefore it must be set accordingly. Otherwise, it will throw error. 
 > Possible values:
 > - *pos*: *deduct*
 > - *web*: *deduct*
 > - *settlement*: *refund*, *fxload*, *fxdeduct*, *noauth*, *chargeback*
 > - *payment*: *payment*, *refund*
 - **atm**: 
-> Possible values: *true/false*. Set to *true* to indicate the transaction type is ATM (01). Default value: *false*.
+> Type: boolean. Possible values: *true/false*. Set to *true* to indicate the transaction type is ATM (01). Default value: *false*.
 - **source**: 
-> Possible values: *mag*, *emv*, or *nfc*. Any other values will be assumed as *emv*. Default value: *emv*.
+> Type: string. Possible values: *mag*, *emv*, or *nfc*. Any other values will be assumed as *emv*. Default value: *emv*.
 - **foreign**: 
-> Possible values: *true*/*false*. Set to *true* to indicate the original currency is not the one set in campaign setting. Default value: *false*.
+> Type: boolean. Possible values: *true*/*false*. Set to *true* to indicate the original currency is not the one set in campaign setting. Default value: *false*.
 - **originalCurrencyCode**: 
-> If not explicitly set while foreign == *true*, the tool will take defaultOriginalCurrencyCode instead.
+> Type: string. If not explicitly set while foreign == *true*, the tool will take defaultOriginalCurrencyCode instead.
 - **originalCurrencyDecimalPlaces**: 
-> If not explicitly set while foreign == *true*, the tool will take defaultOriginalCurrencyDecimalPlaces instead.
+> Type: string. If not explicitly set while foreign == *true*, the tool will take defaultOriginalCurrencyDecimalPlaces instead.
 - **acquirer**:
-> Any string should work. If it is longer than 22 characters, it will be automatically truncated.
+> Type: string. Any string should work. If it is longer than 22 characters, it will be automatically truncated.
 - **province**:
-> Any string should work. If it is longer than 13 characters, it will be automatically truncated.
+> Type: string. Any string should work. If it is longer than 13 characters, it will be automatically truncated.
 - **country**: 
-> Any string should work. It will truncated if it's longer than 3 characters. Note: Country should be set to align with originalCurrencyCode if foreign == *true*.
+> Type: string. Any string should work. It will truncated if it's longer than 3 characters. Note: Country should be set to align with originalCurrencyCode if foreign == *true*.
 - **mcc**:
-> The tool does NOT check for valid MCC. Any 4 digits should work
+> Type: string. The tool does NOT check for valid MCC. Any 4 digits should work
 - **reversal**: 
-> Possible values: *partial* or *full*. Any other values will be assumed as "". Default value: "" (empty string).
+> Type: string. Possible values: *partial* or *full*. Any other values will be assumed as "". Default value: "" (empty string).
 > Note: if paymentType is set, *partial* and *full* will have the same behavior which is full reversal.
 - **advice**: 
-> Possible values: *true*/*false*. Set to *true* to indicate whether a transaction is a Deduct Advice. This field is irrelevant when mode == *Settlement*. Default value: *false*.
+> Type: boolean. Possible values: *true*/*false*. Set to *true* to indicate whether a transaction is a Deduct Advice. This field is irrelevant when mode == *Settlement*. Default value: *false*.
 
 ### **Other Settings**
 
@@ -114,9 +114,12 @@ However, any file extension should work as long as the content follows YAML synt
   - pin
 
 - **shared**: configuration that is shared among test cases.
-  > The tool will automatically generate an amount within given bounds of 2 values below.
+  > The tool will automatically generate an amount within the given bound of 2 values below.
   - amountMin: 
   - amountMax:
   > The tool will use default values below if they are not explicitly set in test case settings.
   - defaultOriginalCurrencyCode:
   - defaultOriginalCurrencyDecimalPlaces:
+  - defaultProvince
+  - defaultCountry
+  - defaultMcc

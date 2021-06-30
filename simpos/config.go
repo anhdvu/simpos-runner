@@ -20,6 +20,9 @@ type SharedConfig struct {
 	AmountMax                            float64 `yaml:"amountMax"`
 	DefaultOriginalCurrencyCode          string  `yaml:"defaultOriginalCurrencyCode"`
 	DefaultOriginalCurrencyDecimalPlaces string  `yaml:"defaultOriginalCurrencyDecimalPlaces"`
+	DefaultProvince                      string  `yaml:"defaultProvince"`
+	DefaultCountry                       string  `yaml:"defaultCountry"`
+	DefaultMcc                           string  `yaml:"defaultMcc"`
 	Token                                string  `yaml:"token"`
 }
 

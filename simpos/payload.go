@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -101,18 +102,11 @@ func NewPayload(tc TestCase, shared SharedConfig, card TestCard) (Payload, error
 }
 
 func makeAuth(tc TestCase, shared SharedConfig, card TestCard) (*Auth, error) {
-	amount := randomizeAmount(shared)
-
 	pl := &Auth{}
 
-	pl.Params.Amount = fmt.Sprintf("%.2f", amount)
-	pl.Params.CardNumber = card.Number
-	pl.Params.Expirydate = card.ExpiryDate
-
-	mode := tc.Mode
-
+	amount := randomizeAmount(shared)
 	// Handle Method and its related fields
-	switch mode {
+	switch tc.Mode {
 	case pos:
 		switch tc.Reversal {
 		case "full":
@@ -156,8 +150,11 @@ func makeAuth(tc TestCase, shared SharedConfig, card TestCard) (*Auth, error) {
 		pl.Params.Source = ""
 		pl.Params.Type = ""
 		pl.Params.Network = ""
-
 	}
+
+	pl.Params.Amount = fmt.Sprintf("%.2f", amount)
+	pl.Params.CardNumber = card.Number
+	pl.Params.Expirydate = card.ExpiryDate
 
 	// Handle fields related to foreign transactions
 	if tc.Foreign {
@@ -176,24 +173,39 @@ func makeAuth(tc TestCase, shared SharedConfig, card TestCard) (*Auth, error) {
 		pl.Params.OriginalCurrencyCode = ""
 		pl.Params.OriginalCurrencyDecimalPlaces = ""
 	}
-	pl.Params.IsAdvice = tc.Advice
-	pl.Params.MerchantCategoryCode = tc.Mcc
+
 	pl.Params.Token = shared.Token
 	pl.Params.Acquirer = formatAcquirer(tc.Acquirer, acquirerLength)
-	pl.Params.Province = formatAcquirer(tc.Province, provinceLength)
-	pl.Params.Country = formatAcquirer(tc.Country, countryLength)
+
+	if tc.Province != "" {
+		pl.Params.Province = formatAcquirer(tc.Province, provinceLength)
+	} else {
+		pl.Params.Province = formatAcquirer(shared.DefaultProvince, provinceLength)
+	}
+
+	if tc.Country != "" {
+		pl.Params.Country = formatAcquirer(tc.Country, countryLength)
+	} else {
+		pl.Params.Country = formatAcquirer(shared.DefaultCountry, countryLength)
+	}
+
+	if tc.Mcc != "" {
+		pl.Params.MerchantCategoryCode = tc.Mcc
+	} else {
+		pl.Params.MerchantCategoryCode = shared.DefaultMcc
+	}
+
+	pl.Params.IsAdvice = tc.Advice
 
 	return pl, nil
 }
 
 func makeSettle(tc TestCase, shared SharedConfig, card TestCard) (*Settle, error) {
+	pl := &Settle{}
+
 	amount := randomizeAmount(shared)
 
-	pl := &Settle{}
-	pl.Params.Amount = fmt.Sprintf("%.2f", amount)
-	pl.Params.CardNumber = card.Number
-
-	switch tc.SettleType {
+	switch tc.Function {
 	case refund:
 		pl.Method = refundAdj
 		pl.Params.SettlementAmount = ""
@@ -220,6 +232,9 @@ func makeSettle(tc TestCase, shared SharedConfig, card TestCard) (*Settle, error
 		return nil, ErrSettleTypeNotSet
 	}
 
+	pl.Params.CardNumber = card.Number
+	pl.Params.Amount = fmt.Sprintf("%.2f", amount)
+
 	if tc.OriginalCurrencyCode != "" {
 		pl.Params.OriginalCurrencyCode = tc.OriginalCurrencyCode
 	} else {
@@ -241,17 +256,58 @@ func makeSettle(tc TestCase, shared SharedConfig, card TestCard) (*Settle, error
 	}
 
 	pl.Params.Partial = false
-	pl.Params.MerchantCategoryCode = tc.Mcc
 	pl.Params.Token = shared.Token
 	pl.Params.Acquirer = formatAcquirer(tc.Acquirer, acquirerLength)
-	pl.Params.Province = formatAcquirer(tc.Province, provinceLength)
-	pl.Params.Country = formatAcquirer(tc.Country, countryLength)
+
+	if tc.Province != "" {
+		pl.Params.Province = formatAcquirer(tc.Province, provinceLength)
+	} else {
+		pl.Params.Province = formatAcquirer(shared.DefaultProvince, provinceLength)
+	}
+
+	if tc.Country != "" {
+		pl.Params.Country = formatAcquirer(tc.Country, countryLength)
+	} else {
+		pl.Params.Country = formatAcquirer(shared.DefaultCountry, countryLength)
+	}
+
+	if tc.Mcc != "" {
+		pl.Params.MerchantCategoryCode = tc.Mcc
+	} else {
+		pl.Params.MerchantCategoryCode = shared.DefaultMcc
+	}
 
 	return pl, nil
 }
 
-func makePayment(tc TestCase, shared SharedConfig, card TestCard) (Payload, error) {
-	return &Payment{}, nil
+func makePayment(tc TestCase, shared SharedConfig, card TestCard) (*Payment, error) {
+	pl := &Payment{}
+
+	switch tc.Function {
+	case payment:
+		pl.Method = loadAdj
+	case refund:
+		pl.Method = refundAuth
+	default:
+		return nil, ErrSettleTypeNotSet
+	}
+	amount := randomizeAmount(shared)
+	pl.Params.Amount = fmt.Sprintf("%.2f", amount)
+	pl.Params.CardNumber = card.Number
+
+	acquirer := formatAcquirer(tc.Acquirer, acquirerLength)
+	province := formatAcquirer(tc.Province, provinceLength)
+	country := formatAcquirer(tc.Country, countryLength)
+	pl.Params.MerchantDescription = fmt.Sprintf("%v %v %v", acquirer, province, country)
+
+	switch tc.Reversal {
+	case "full", "partial":
+		pl.Params.Reversal = true
+	default:
+		pl.Params.Reversal = false
+	}
+
+	return pl, nil
 }
 
 func NewRequest(p Payload) (*http.Request, error) {
@@ -261,6 +317,7 @@ func NewRequest(p Payload) (*http.Request, error) {
 		fmt.Println("Error occured at function NewRequest.")
 		return nil, err
 	}
+	p.JSON(os.Stdout)
 
 	return http.NewRequest(http.MethodPost, baseUrl, buf)
 }

@@ -13,9 +13,9 @@ shared:
   amountMax: 6
   defaultOriginalCurrencyCode: '978'
   defaultOriginalCurrencyDecimalPlaces: '2'
-  defaultProvince:
-  defaultCountry:
-  token:
+  defaultProvince: 'COMPANION'
+  defaultCountry: 'VNM'
+  defaultMcc: '7299'
 testcases:
   - included: false 
     name: ecommerce
@@ -34,7 +34,7 @@ testcases:
     reversal:
     advice: false 
 
-  - included: false 
+  - included: true 
     name: pos reversal
     runs: 1 
     mode: pos 
@@ -45,8 +45,8 @@ testcases:
     originalCurrencyCode: 
     originalCurrencyDecimalPlaces: 
     acquirer: POS DEDUCT REV
-    province: COMPANION
-    country: DEU
+    province: 
+    country: 
     mcc: '7299'
     reversal: full
     advice: false
