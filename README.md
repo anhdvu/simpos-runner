@@ -37,24 +37,26 @@ However, any file extension should work as long as the content follows YAML synt
       amountMax: 6
       defaultOriginalCurrencyCode: '978'
       defaultOriginalCurrencyDecimalPlaces: '2'
+      defaultProvince:
+      defaultCountry:
       token:
     testcases:
-    - included: true
-      name: Test an ECOM transaction
-      runs: 1
-      mode: web
-      atm: false
-      settleType:
-      reversal:
-      mcc: '7299'
-      source: emv
-      foreign: false
-      originalCurrencyCode:
-      originalCurrencyDecimalPlaces:
-      acquirer: ECOM DEDUCT
+    - included: false 
+      name: pos reversal
+      runs: 1 
+      mode: pos 
+      function: 
+      atm: false  
+      source: nfc 
+      foreign: false 
+      originalCurrencyCode: 
+      originalCurrencyDecimalPlaces: 
+      acquirer: POS DEDUCT REV
       province: COMPANION
-      country: VNM
-      advice: false
+      country: DEU
+      mcc: '7299'
+      reversal: full
+      advice: false  
 
 
 ***IMPORTANT***: *The hyphen "-" before "included" is mandatory because it signals a new test case.*
@@ -68,16 +70,16 @@ However, any file extension should work as long as the content follows YAML synt
 - **runs**: 
 > Set the number of runs for a specific test case. Default value: 1.
 - **mode**: 
-> Possible values: *pos*, *web*, *settlement*. Any other values will be assumed error.
+> Possible values: *pos*, *web*, *settlement*, *payment*. Any other values will throw error.
+- **function**:
+> This field is tied with field mode above, therefore it must be set accordingly. Otherwise, it will throw error. 
+> Possible values:
+> - *pos*: *deduct*
+> - *web*: *deduct*
+> - *settlement*: *refund*, *fxload*, *fxdeduct*, *noauth*, *chargeback*
+> - *payment*: *payment*, *refund*
 - **atm**: 
 > Possible values: *true/false*. Set to *true* to indicate the transaction type is ATM (01). Default value: *false*.
-- **settleType**: 
-> Possible values: *refund*, *fxload*, *fxdeduct*. This field must be set when ***mode == settlement***. Default value: "" (emptry string).
-- **reversal**: 
-> Possible values: *partial* or *full*. Any other values will be assumed as "". Default value: "" (empty string).
-> Note: if paymentType is set, *partial* and *full* will have the same behavior which is full reversal.
-- **mcc**:
-> The tool does NOT check for valid MCC. Any 4 digits should work
 - **source**: 
 > Possible values: *mag*, *emv*, or *nfc*. Any other values will be assumed as *emv*. Default value: *emv*.
 - **foreign**: 
@@ -92,6 +94,11 @@ However, any file extension should work as long as the content follows YAML synt
 > Any string should work. If it is longer than 13 characters, it will be automatically truncated.
 - **country**: 
 > Any string should work. It will truncated if it's longer than 3 characters. Note: Country should be set to align with originalCurrencyCode if foreign == *true*.
+- **mcc**:
+> The tool does NOT check for valid MCC. Any 4 digits should work
+- **reversal**: 
+> Possible values: *partial* or *full*. Any other values will be assumed as "". Default value: "" (empty string).
+> Note: if paymentType is set, *partial* and *full* will have the same behavior which is full reversal.
 - **advice**: 
 > Possible values: *true*/*false*. Set to *true* to indicate whether a transaction is a Deduct Advice. This field is irrelevant when mode == *Settlement*. Default value: *false*.
 

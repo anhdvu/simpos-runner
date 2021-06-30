@@ -13,112 +13,108 @@ shared:
   amountMax: 6
   defaultOriginalCurrencyCode: '978'
   defaultOriginalCurrencyDecimalPlaces: '2'
+  defaultProvince:
+  defaultCountry:
   token:
 testcases:
-  - included: true # Possible values: true/false. Set to "false" to exclude the test in the run. Default value: true
-    name: Test an ecommerce transaction
-    runs: 10 # Set the number of runs for a specific test case. Default value: 1.
-    mode: web # Possible values: pos, web, settlement, payment. Any other values will be assumed error.
-    atm: false # Possible values: true/false. Set to true to indicate the transaction type is ATM (01). Default value: false.
-    settleType: # Possible values: refund, fxload, fxdeduct. This field must be set when mode == settlement. Default value: "" (emptry string).
-    paymentType: # Possible values: payment, refund. This field must be set when mode == payment. Default value: "" (emptry string).
-    reversal: # Possible values: partial or full. Any other values will be assumed as "". Default value: "" (empty string).
-    mcc: '7299'
-    source: emv # Possible values: mag, emv, or nfc. Any other values will be assumed as mag. Default value: emv
-    foreign: false # Possible values: true/false. Set to true to indicate the original currency is not the one set in campaign setting. Default value: false.
-    originalCurrencyCode: # If not explicitly set while foreign == true, the automator will take defaultOriginalCurrencyCode instead.
-    originalCurrencyDecimalPlaces: # If not explicitly set while foreign == true, the automator will take defaultOriginalCurrencyDecimalPlaces instead.
+  - included: false 
+    name: ecommerce
+    runs: 1 
+    mode: web 
+    function: 
+    atm: false  
+    source: 
+    foreign: false 
+    originalCurrencyCode: 
+    originalCurrencyDecimalPlaces: 
     acquirer: ECOM DEDUCT
     province: COMPANION
-    country: VNM # Country should be set to align with originalCurrencyCode if foreign == true.
-    advice: false # Indicate whether a transaction is a Deduct Advice. This field is irrelevant to Settlement. Default value: false.
+    country: VNM
+    mcc: '7299'
+    reversal:
+    advice: false 
 
   - included: false 
-    name: Test a pos reversal transaction
-    runs: 100 
+    name: pos reversal
+    runs: 1 
     mode: pos 
-    atm: false 
-    settleType:
-    paymentType: 
-    reversal: full 
-    mcc: '7299'
+    function: 
+    atm: false  
     source: nfc 
     foreign: false 
     originalCurrencyCode: 
-    originalCurrencyDecimalPlaces:
+    originalCurrencyDecimalPlaces: 
     acquirer: POS DEDUCT REV
     province: COMPANION
     country: DEU
+    mcc: '7299'
+    reversal: full
     advice: false
 
   - included: false 
-    name: Test a refund transaction
+    name: refund
     runs: 1 
     mode: settlement 
-    atm: false 
-    settleType: refund
-    paymentType:
-    reversal:
-    mcc: '7299'
-    source: nfc
-    foreign: false
-    originalCurrencyCode:
-    originalCurrencyDecimalPlaces:
+    function: refund
+    atm: false  
+    source: emv 
+    foreign: false 
+    originalCurrencyCode: 
+    originalCurrencyDecimalPlaces: 
     acquirer: REFUND TEST
     province: COMPANION
     country: VNM
-    advice: false
+    mcc: '7299'
+    reversal:
+    advice: false  
 
   - included: false 
-    name: Test a fx load adjustment transaction
+    name: fx load adjustment
     runs: 1 
     mode: settlement 
-    atm: false 
-    settleType: fxload
-    paymentType:
-    reversal:
-    mcc: '7299'
-    source:
-    foreign: false
-    originalCurrencyCode:
-    originalCurrencyDecimalPlaces:
+    function: fxload
+    atm: false  
+    source: 
+    foreign: false 
+    originalCurrencyCode: 
+    originalCurrencyDecimalPlaces: 
     acquirer: FX LOAD TEST
     province: COMPANION
     country: VNM
-    advice: false
-
-  - included: false 
-    name: Test a fx deduct adjustment transaction
-    runs: 1 
-    mode: settlement 
-    atm: false 
-    settleType: fxdeduct
-    paymentType:
-    reversal:
     mcc: '7299'
-    source:
-    foreign: false
-    originalCurrencyCode:
-    originalCurrencyDecimalPlaces:
-    acquirer: FX DEDUCT TEST
-    province: COMPANION
-    country: SGP
+    reversal:
     advice: false
   
   - included: false 
-    name: Refund Auth
-    runs: 10 
-    mode: payment 
-    atm: false 
-    settleType:
-    paymentType: refund
-    reversal:
+    name: fx deduct adjustment
+    runs: 1 
+    mode: settlement 
+    function: fxdeduct
+    atm: false  
+    source: 
+    foreign: false 
+    originalCurrencyCode: 
+    originalCurrencyDecimalPlaces: 
+    acquirer: FX DEDUCT TEST
+    province: COMPANION
+    country: SGP
     mcc: '7299'
-    source: nfc
-    foreign: false
-    originalCurrencyCode:
-    originalCurrencyDecimalPlaces:
-    acquirer: REFUND AUTH
+    reversal:
+    advice: false
+  
+  - included: false 
+    name: chargeback
+    runs: 1 
+    mode: settlement 
+    function: chargeback
+    atm: false  
+    source: 
+    foreign: false 
+    originalCurrencyCode: 
+    originalCurrencyDecimalPlaces: 
+    acquirer: CHARGEBACK TEST
     province: COMPANION
     country: VNM
+    mcc: '7299'
+    reversal:
     advice: false

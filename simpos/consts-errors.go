@@ -16,6 +16,7 @@ const (
 	provinceLength int    = 13
 	countryLength  int    = 3
 
+	// Methods
 	posDeduct        string = "POSDeduct"
 	webDeduct        string = "WEBDeduct"
 	posDeductRev     string = "POSDeductReverse"
@@ -24,12 +25,14 @@ const (
 	forexAdj         string = "ForexAdjustment"
 	refundAuth       string = "RefundAuth"
 	loadAdj          string = "LoadAdjustment"
+	adjWithReason    string = "AdjustmentWithReason"
 
-	refund     string = "refund"
-	fxload     string = "fxload"
-	fxdeduct   string = "fxdeduct"
-	noauth     string = "noauth"
-	chargeback string = "chargeback"
+	refund                string = "refund"
+	fxload                string = "fxload"
+	fxdeduct              string = "fxdeduct"
+	noauth                string = "noauth"
+	chargeback            string = "chargeback"
+	settlementWithoutAuth string = "SettlementWithoutAuth"
 
 	reversal   string = "reversal"
 	adjustment string = "adjustment"

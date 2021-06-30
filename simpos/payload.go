@@ -58,6 +58,7 @@ type Settle struct {
 		OriginalCurrencyDecimalPlaces string `json:"originalCurrencyDecimalPlaces,omitempty"`
 		Partial                       bool   `json:"partial"`
 		Province                      string `json:"province"`
+		Reason                        string `json:"reason,omitempty"`
 		SettlementAmount              string `json:"settlementAmount"`
 		Token                         string `json:"token"`
 		Type                          string `json:"type"`
@@ -93,7 +94,8 @@ func NewPayload(tc TestCase, shared SharedConfig, card TestCard) (Payload, error
 		return makeAuth(tc, shared, card)
 	case settlement:
 		return makeSettle(tc, shared, card)
-
+	case payment:
+		return makePayment(tc, shared, card)
 	}
 	return nil, ErrUnsupportedMode
 }
@@ -204,6 +206,16 @@ func makeSettle(tc TestCase, shared SharedConfig, card TestCard) (*Settle, error
 		pl.Method = forexAdj
 		pl.Params.SettlementAmount = fmt.Sprintf("%.2f", amount-makePartialAmount(amount))
 		pl.Params.Type = "20"
+	case noauth:
+		pl.Method = adjWithReason
+		pl.Params.Amount = ""
+		pl.Params.SettlementAmount = fmt.Sprintf("%.2f", amount)
+		pl.Params.Reason = settlementWithoutAuth
+		pl.Params.Type = ""
+	case chargeback:
+		pl.Method = adjWithReason
+		pl.Params.Reason = strings.Title(chargeback)
+		pl.Params.Type = ""
 	default:
 		return nil, ErrSettleTypeNotSet
 	}
@@ -236,6 +248,10 @@ func makeSettle(tc TestCase, shared SharedConfig, card TestCard) (*Settle, error
 	pl.Params.Country = formatAcquirer(tc.Country, countryLength)
 
 	return pl, nil
+}
+
+func makePayment(tc TestCase, shared SharedConfig, card TestCard) (Payload, error) {
+	return &Payment{}, nil
 }
 
 func NewRequest(p Payload) (*http.Request, error) {

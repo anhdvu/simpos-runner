@@ -35,11 +35,8 @@ type TestCase struct {
 	Name                          string `yaml:"name"`
 	Runs                          int    `yaml:"runs"`
 	Mode                          string `yaml:"mode"`
+	Function                      string `yaml:"function"`
 	ATM                           bool   `yaml:"atm"`
-	SettleType                    string `yaml:"settleType"`
-	PaymentType                   string `yaml:"paymentType"`
-	Reversal                      string `yaml:"reversal"`
-	Mcc                           string `yaml:"mcc"`
 	Source                        string `yaml:"source"`
 	Foreign                       bool   `yaml:"foreign"`
 	OriginalCurrencyCode          string `yaml:"originalCurrencyCode"`
@@ -47,6 +44,8 @@ type TestCase struct {
 	Acquirer                      string `yaml:"acquirer"`
 	Province                      string `yaml:"province"`
 	Country                       string `yaml:"country"`
+	Mcc                           string `yaml:"mcc"`
+	Reversal                      string `yaml:"reversal"`
 	Advice                        bool   `yaml:"advice"`
 }
 
