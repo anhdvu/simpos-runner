@@ -31,11 +31,11 @@ var rootCmd = &cobra.Command{
 It utilizes the SimPOS REST API to automate testing efforts.
 Its main strengths are light-weight and extensible.
 
+Version: 
+
 Usage examples:
 	spb run --file <config file> ==> Run predefined test cases in a config file.
 	spb run --queue reversal/adjustment/both ==> Run either the reversal, adjustment queue, or both.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
@@ -58,26 +58,3 @@ func init() {
 	// when this action is called directly.
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
-
-// initConfig reads in config file and ENV variables if set.
-// func initConfig() {
-// 	if cfgFile != "" {
-// 		// Use config file from the flag.
-// 		viper.SetConfigFile(cfgFile)
-// 	} else {
-// 		// Find home directory.
-// 		home, err := homedir.Dir()
-// 		cobra.CheckErr(err)
-
-// 		// Search config in home directory with name ".simposbot" (without extension).
-// 		viper.AddConfigPath(home)
-// 		viper.SetConfigName(".simposbot")
-// 	}
-
-// 	viper.AutomaticEnv() // read in environment variables that match
-
-// 	// If a config file is found, read it in.
-// 	if err := viper.ReadInConfig(); err == nil {
-// 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-// 	}
-// }
