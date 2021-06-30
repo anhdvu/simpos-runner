@@ -28,6 +28,7 @@ func Run(f string) {
 		Timeout: time.Duration(timeout) * time.Second,
 	}
 	t := time.Now()
+	fmt.Println("========== START ==========")
 	for _, tc := range testcases {
 		if tc.Included {
 			for i := 0; i < tc.Runs; i++ {
@@ -49,14 +50,21 @@ func Run(f string) {
 					fmt.Println("ERROR: Unable to parse json in response body", err)
 				}
 				fmt.Println("========== RESULT ==========")
-				fmt.Println("WALLET REQUEST\n", result.WalletRequest)
-				fmt.Println("WALLET RESPONSE\n", result.WalletResponse)
+				fmt.Printf("Result Code: %v\n", result.ResultCode)
+				fmt.Printf("Result Text: %v\n\n", result.ResultText)
+				fmt.Printf("WALLET REQUEST\n%v\n\n", result.WalletRequest)
+				fmt.Printf("WALLET RESPONSE\n%v\n\n", result.WalletResponse)
 
 				if result.ReversalWalletRequest != "" {
-					fmt.Println("REVERSAL WALLET REQUEST\n", result.ReversalWalletRequest)
-					fmt.Println("REVERSAL WALLET RESPONSE\n", result.ReversalWalletResponse)
+					fmt.Printf("REVERSAL WALLET REQUEST\n%v\n\n", result.ReversalWalletRequest)
+					fmt.Printf("REVERSAL WALLET RESPONSE\n%v\n\n", result.ReversalWalletResponse)
 				}
-				fmt.Println("DE 39: ", result.IsoResponsePacket["39"])
+
+				p, ok := result.IsoResponsePacket.(map[string]interface{})
+				if ok {
+					fmt.Printf("ISO Response - DE 39: %v\n", p["39"])
+				}
+
 				fmt.Println("============================")
 				time.Sleep(time.Millisecond)
 			}

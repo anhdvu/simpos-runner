@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"strings"
 )
 
@@ -317,25 +316,24 @@ func NewRequest(p Payload) (*http.Request, error) {
 		fmt.Println("Error occured at function NewRequest.")
 		return nil, err
 	}
-	p.JSON(os.Stdout)
 
 	return http.NewRequest(http.MethodPost, baseUrl, buf)
 }
 
 type Result struct {
-	IsoRequest             string            `json:"isoRequest"`
-	IsoResponse            string            `json:"isoResponse"`
-	IsoPacket              map[string]string `json:"isoPacket,omitempty"`
-	IsoResponsePacket      map[string]string `json:"isoResponsePacket"`
-	IsoSettlementResponse  map[string]string `json:"isoSettlementResponse,omitempty"`
-	ResultCode             int               `json:"resultCode,omitempty"`
-	ResultText             string            `json:"resultText,omitempty"`
-	ReversalIsoRequest     string            `json:"reversalIsoRequest,omitempty"`
-	ReversalIsoResponse    string            `json:"reversalIsoResponse,omitempty"`
-	ReversalWalletRequest  string            `json:"reversalWalletRequest,omitempty"`
-	ReversalWalletResponse string            `json:"reversalWalletResponse,omitempty"`
-	WalletRequest          string            `json:"walletRequest"`
-	WalletResponse         string            `json:"walletResponse"`
+	IsoRequest             string      `json:"isoRequest"`
+	IsoResponse            string      `json:"isoResponse"`
+	IsoPacket              interface{} `json:"isoPacket,omitempty"`
+	IsoResponsePacket      interface{} `json:"isoResponsePacket"`
+	IsoSettlementResponse  interface{} `json:"isoSettlementResponse,omitempty"`
+	ResultCode             int         `json:"resultCode,omitempty"`
+	ResultText             string      `json:"resultText,omitempty"`
+	ReversalIsoRequest     string      `json:"reversalIsoRequest,omitempty"`
+	ReversalIsoResponse    string      `json:"reversalIsoResponse,omitempty"`
+	ReversalWalletRequest  string      `json:"reversalWalletRequest,omitempty"`
+	ReversalWalletResponse string      `json:"reversalWalletResponse,omitempty"`
+	WalletRequest          string      `json:"walletRequest"`
+	WalletResponse         string      `json:"walletResponse"`
 }
 
 func (r *Result) FromJSON(b io.Reader) error {
